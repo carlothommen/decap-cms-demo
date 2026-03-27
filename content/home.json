@@ -1,5 +1,25 @@
 {
-  "titel": "Meine CMS Einbindung",
-  "text": "Das ist meine erste Seite mit Decap CMS. hallo",
-  "bild": "/images/ichundjill.png"
+    "titel": "Bücher Liebe",
+    "untertitel": "Meine liebsten Bücher, gesammelt an einem Ort.",
+    "hero_bild": "/images/placeholder.jpg",
+    "buecher": [
+        {
+            "buchtitel": "Der Alchimist",
+            "autor": "Paulo Coelho",
+            "beschreibung": "Eine inspirierende Geschichte über einen Hirten, der seinem Traum folgt.",
+            "cover": "/images/placeholder.jpg"
+        },
+        {
+            "buchtitel": "Sapiens",
+            "autor": "Yuval Noah Harari",
+            "beschreibung": "Eine kurze Geschichte der Menschheit, die alles in Frage stellt.",
+            "cover": "/images/placeholder.jpg"
+        },
+        {
+            "buchtitel": "Atomic Habits",
+            "autor": "James Clear",
+            "beschreibung": "Wie kleine Gewohnheiten grosse Veränderungen bewirken können.",
+            "cover": "/images/placeholder.jpg"
+        }
+    ]
 }

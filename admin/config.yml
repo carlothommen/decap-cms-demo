@@ -14,5 +14,13 @@ collections:
         file: "content/home.json"
         fields:
           - { label: "Titel", name: "titel", widget: "string" }
-          - { label: "Text", name: "text", widget: "text" }
-          - { label: "Bild", name: "bild", widget: "image" }
+          - { label: "Untertitel", name: "untertitel", widget: "string" }
+          - { label: "Hero Bild", name: "hero_bild", widget: "image" }
+          - label: "Bücher"
+            name: "buecher"
+            widget: "list"
+            fields:
+              - { label: "Buchtitel", name: "buchtitel", widget: "string" }
+              - { label: "Autor", name: "autor", widget: "string" }
+              - { label: "Beschreibung", name: "beschreibung", widget: "text" }
+              - { label: "Cover", name: "cover", widget: "image" }
