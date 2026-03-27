@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <title>CMS Demo</title>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+
+    <div class="max-w-xl p-8 mx-auto"
+         x-data="{ titel: '', text: '', bildUrl: '' }"
+         x-init="
+            fetch('/content/home.json')
+                .then(r => r.json())
+                .then(d => {
+                    titel = d.titel
+                    text = d.text
+                    bildUrl = d.bild
+                })
+         ">
+
+        <h1 class="mb-4 text-4xl font-bold" x-text="titel"></h1>
+        <p class="mb-6 text-lg text-gray-700" x-text="text"></p>
+        <img :src="bildUrl" class="w-full rounded-lg" />
+
+    </div>
+
+<script>
+    if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", user => {
+            if (!user) {
+                window.netlifyIdentity.on("login", () => {
+                    document.location.href = "/admin/";
+                });
+            }
+        });
+    }
+</script>
+</body>
+</html>
