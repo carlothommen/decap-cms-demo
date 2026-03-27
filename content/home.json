@@ -7,19 +7,19 @@
       "buchtitel": "Der Alchimist",
       "autor": "Paulo Coelho",
       "beschreibung": "Eine inspirierende Geschichte über einen Hirten, der seinem Traum folgt.",
-      "cover": "/images/placeholder.jpg"
+      "cover": "/images/minimalist-desert-scene-with-simple-pyramid-silhou.svg"
     },
     {
       "buchtitel": "Sapiens",
       "autor": "Yuval Noah Harari",
       "beschreibung": "Eine kurze Geschichte der Menschheit, die alles in Frage stellt.",
-      "cover": "/images/placeholder.jpg"
+      "cover": "/images/minimalist-human-evolution-concept-simple-silhoue.svg"
     },
     {
       "buchtitel": "Atomic Habits",
       "autor": "James Clear",
       "beschreibung": "Wie kleine Gewohnheiten grosse Veränderungen bewirken können.",
-      "cover": "/images/placeholder.jpg"
+      "cover": "/images/minimalist-building-blocks-stacking-upward-simple.svg"
     }
   ]
 }
