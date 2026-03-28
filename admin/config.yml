@@ -15,7 +15,6 @@ collections:
         fields:
           - { label: "Titel", name: "titel", widget: "string" }
           - { label: "Untertitel", name: "untertitel", widget: "string" }
-          - { label: "Hero Bild", name: "hero_bild", widget: "image" }
           - label: "Bücher"
             name: "buecher"
             widget: "list"
