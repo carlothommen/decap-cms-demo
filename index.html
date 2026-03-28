@@ -31,12 +31,15 @@
             animation: fadeIn 1s ease-out 1.2s forwards;
             opacity: 0;
         }
+        body {
+            font-family: 'Forum', serif;
+        }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Forum&display=swap" rel="stylesheet">
 </head>
-<body class="bg-stone-50 text-stone-900 font-['Forum']">
+<body class="bg-stone-50 text-stone-900 ">
 
     <div x-data="{ titel: '', untertitel: '', buecher: [] }"
          x-init="
