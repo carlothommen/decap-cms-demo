@@ -67,7 +67,33 @@
     <!-- Alpine.js: CMS-Daten und Notion-Bücher laden -->
     <div x-data="{
             titel: '', untertitel: '',
-            buecher: [], seite: 1, mehrVorhanden: false, ladet: false
+            buecher: [], seite: 1, mehrVorhanden: false, ladet: false,
+            sortierung: 'titel',
+            ladeBuecher() {
+                this.ladet = true
+                fetch('https://notion-buecher.carlothommen.workers.dev?page=' + this.seite + '&sort=' + this.sortierung)
+                    .then(r => r.json())
+                    .then(d => {
+                        const neue = d.results.map(r => ({
+                            titel: r.properties.Titel.title[0]?.plain_text || '',
+                            autor: r.properties['Autor*in'].rich_text[0]?.plain_text || '',
+                            beschreibung: r.properties.Beschreibung.rich_text[0]?.plain_text || '',
+                            bild: r.icon?.external?.url || r.icon?.file?.url || ''
+                        }))
+                        if (this.seite === 1) {
+                            this.buecher = neue
+                        } else {
+                            this.buecher = [...this.buecher, ...neue]
+                        }
+                        this.mehrVorhanden = d.has_more
+                        this.ladet = false
+                    })
+            },
+            wechsleSortierung(sort) {
+                this.sortierung = sort
+                this.seite = 1
+                this.ladeBuecher()
+            }
          }"
          x-init="
             fetch('/content/home.json')
@@ -76,17 +102,7 @@
                     titel = d.titel
                     untertitel = d.untertitel
                 });
-            fetch('https://notion-buecher.carlothommen.workers.dev?page=1')
-                .then(r => r.json())
-                .then(d => {
-                    buecher = d.results.map(r => ({
-                        titel: r.properties.Titel.title[0]?.plain_text || '',
-                        autor: r.properties['Autor*in'].rich_text[0]?.plain_text || '',
-                        beschreibung: r.properties.Beschreibung.rich_text[0]?.plain_text || '',
-                        bild: r.icon?.external?.url || r.icon?.file?.url || ''
-                    }))
-                    mehrVorhanden = d.has_more
-                })
+            ladeBuecher()
          ">
 
         <!-- Hero -->
@@ -106,7 +122,27 @@
 
         <!-- Bücher Galerie: Karten werden aus Notion-Datenbank geladen -->
         <section class="max-w-6xl px-8 py-20 mx-auto">
-            <h2 class="mb-12 text-3xl font-bold text-center">Meine Empfehlungen</h2>
+            <h2 class="mb-8 text-3xl font-bold text-center">Meine Empfehlungen</h2>
+
+            <!-- Sortier-Buttons -->
+            <div class="flex flex-wrap justify-center gap-3 mb-12">
+                <button @click="wechsleSortierung('titel')"
+                    class="px-4 py-2 text-sm rounded-full transition-colors"
+                    :class="sortierung === 'titel' ? 'bg-[#6E4CEB] text-white' : 'bg-stone-200 text-stone-700 hover:bg-stone-300'"
+                >Titel A-Z</button>
+                <button @click="wechsleSortierung('autor')"
+                    class="px-4 py-2 text-sm rounded-full transition-colors"
+                    :class="sortierung === 'autor' ? 'bg-[#6E4CEB] text-white' : 'bg-stone-200 text-stone-700 hover:bg-stone-300'"
+                >Autor*in A-Z</button>
+                <button @click="wechsleSortierung('bewertung')"
+                    class="px-4 py-2 text-sm rounded-full transition-colors"
+                    :class="sortierung === 'bewertung' ? 'bg-[#6E4CEB] text-white' : 'bg-stone-200 text-stone-700 hover:bg-stone-300'"
+                >Bewertung</button>
+                <button @click="wechsleSortierung('jahr')"
+                    class="px-4 py-2 text-sm rounded-full transition-colors"
+                    :class="sortierung === 'jahr' ? 'bg-[#6E4CEB] text-white' : 'bg-stone-200 text-stone-700 hover:bg-stone-300'"
+                >Gelesen (Jahr)</button>
+            </div>
             <div class="grid gap-8 md:grid-cols-3">
                 <!-- x-for: Fuer jedes Buch eine Karte erstellen -->
                 <template x-for="buch in buecher" :key="buch.titel">
@@ -127,23 +163,7 @@
                     class="px-8 py-3 text-white bg-[#6E4CEB] rounded-lg hover:bg-[#5a3cc7] transition-colors"
                     :class="{ 'opacity-50': ladet }"
                     :disabled="ladet"
-                    @click="
-                        ladet = true
-                        seite++
-                        fetch('https://notion-buecher.carlothommen.workers.dev?page=' + seite)
-                            .then(r => r.json())
-                            .then(d => {
-                                const neue = d.results.map(r => ({
-                                    titel: r.properties.Titel.title[0]?.plain_text || '',
-                                    autor: r.properties['Autor*in'].rich_text[0]?.plain_text || '',
-                                    beschreibung: r.properties.Beschreibung.rich_text[0]?.plain_text || '',
-                                    bild: r.icon?.external?.url || r.icon?.file?.url || ''
-                                }))
-                                buecher = [...buecher, ...neue]
-                                mehrVorhanden = d.has_more
-                                ladet = false
-                            })
-                    "
+                    @click="seite++; ladeBuecher()"
                     x-text="ladet ? 'Lädt...' : 'Mehr Bücher laden'"
                 ></button>
             </div>
