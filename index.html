@@ -3,44 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Tailwind CSS Framework -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Alpine.js fuer dynamische Inhalte (CMS-Daten anzeigen) -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     <title>Bücher Liebe</title>
+
+    <!-- Netlify Identity Widget fuer CMS-Login -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+    <!-- Lade-Animationen und Schrift -->
     <style>
+        /* Buecher fahren von oben rein */
         @keyframes slideDown {
             from { transform: translateY(-100%); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
+        /* Text blendet ein und schwebt hoch */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        /* Aeussere Buecher: starten sofort */
         .anim-slide-down {
             animation: slideDown 1.2s ease-out forwards;
         }
+        /* Innere Buecher: starten mit 0.3s Verzoegerung */
         .anim-slide-down-slow {
             animation: slideDown 1.5s ease-out 0.3s forwards;
             opacity: 0;
         }
+        /* Titel: blendet nach 0.8s ein */
         .anim-fade-in {
             animation: fadeIn 1s ease-out 0.8s forwards;
             opacity: 0;
         }
+        /* Untertitel: blendet nach 1.2s ein */
         .anim-fade-in-late {
             animation: fadeIn 1s ease-out 1.2s forwards;
             opacity: 0;
         }
+        /* Google Font auf die ganze Seite anwenden */
         body {
             font-family: 'Forum', serif;
         }
     </style>
+
+    <!-- Google Font "Forum" laden -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Forum&display=swap" rel="stylesheet">
 </head>
 <body class="bg-stone-50 text-stone-900 ">
 
+    <!-- Alpine.js: CMS-Daten aus JSON laden -->
     <div x-data="{ titel: '', untertitel: '', buecher: [] }"
          x-init="
             fetch('/content/home.json')
@@ -55,22 +74,24 @@
 
         <!-- Hero -->
         <header class="relative flex items-center justify-center h-screen overflow-hidden bg-[#6E4CEB]">
-            <!-- Parallax Ebenen -->
+            <!-- Parallax Ebenen: 4 Buechertuerme mit unterschiedlicher Scroll-Geschwindigkeit -->
             <img src="/images/Gruppe.svg" class="parallax-layer anim-slide-down absolute bottom-0 left-0 w-[35%] max-w-md" data-speed="1.5" />
             <img src="/images/Gruppe2.svg" class="parallax-layer anim-slide-down-slow absolute bottom-0 left-[10%] w-[40%] max-w-lg" data-speed="0.8" />
             <img src="/images/Gruppe3.svg" class="parallax-layer anim-slide-down-slow absolute bottom-0 right-[10%] w-[40%] max-w-lg" data-speed="0.8" />
             <img src="/images/Gruppe.svg" class="parallax-layer anim-slide-down absolute bottom-0 right-0 w-[35%] max-w-md" data-speed="1.5" />
 
-            <div class="relative z-10 px-8 text-center parallax-layer" data-speed="1.0">
+            <!-- Titel und Untertitel (aus CMS) -->
+            <div class="relative z-10 px-8 text-center parallax-layer" data-speed="1.0 mb-32">
                 <h1 class="text-6xl font-bold text-white anim-fade-in md:text-8xl" x-text="titel"></h1>
                 <p class="mt-4 text-xl text-white anim-fade-in-late md:text-2xl" x-text="untertitel"></p>
             </div>
         </header>
 
-        <!-- Bücher Galerie -->
+        <!-- Bücher Galerie: Karten werden dynamisch aus CMS-Daten generiert -->
         <section class="max-w-6xl px-8 py-20 mx-auto">
             <h2 class="mb-12 text-3xl font-bold text-center">Meine Empfehlungen</h2>
             <div class="grid gap-8 md:grid-cols-3">
+                <!-- x-for: Fuer jedes Buch in der Liste eine Karte erstellen -->
                 <template x-for="buch in buecher" :key="buch.buchtitel">
                     <div class="overflow-hidden transition-transform bg-white shadow-md rounded-xl hover:scale-105">
                         <img :src="buch.cover" class="object-cover w-full h-64" />
@@ -91,8 +112,8 @@
 
     </div>
 
+<!-- Parallax-Effekt: Wartet bis Lade-Animationen fertig sind, dann aktiviert Scroll-Verschiebung -->
 <script>
-    // Parallax erst starten wenn Animationen fertig sind
     setTimeout(() => {
         document.querySelectorAll('.parallax-layer').forEach(layer => {
             layer.style.animation = 'none';
@@ -108,6 +129,7 @@
     }, 2000);
 </script>
 
+<!-- Netlify Identity: Leitet nach Login automatisch zur Admin-Seite weiter -->
 <script>
     if (window.netlifyIdentity) {
         window.netlifyIdentity.on("init", user => {
