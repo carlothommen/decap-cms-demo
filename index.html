@@ -74,12 +74,18 @@
                 fetch('https://notion-buecher.carlothommen.workers.dev?page=' + this.seite + '&sort=' + this.sortierung)
                     .then(r => r.json())
                     .then(d => {
-                        const neue = d.results.map(r => ({
-                            titel: r.properties.Titel.title[0]?.plain_text || '',
-                            autor: r.properties['Autor*in'].rich_text[0]?.plain_text || '',
-                            beschreibung: r.properties.Beschreibung.rich_text[0]?.plain_text || '',
-                            bild: r.icon?.external?.url || r.icon?.file?.url || ''
-                        }))
+                        const neue = d.results.map(r => {
+                            const bild = r.properties.Bild?.files?.[0]
+                            const bildUrl = bild?.external?.url || bild?.file?.url || r.icon?.external?.url || r.icon?.file?.url || ''
+                            return {
+                                titel: r.properties.Titel.title[0]?.plain_text || '',
+                                autor: r.properties['Autor*in'].rich_text[0]?.plain_text || '',
+                                beschreibung: r.properties.Beschreibung.rich_text[0]?.plain_text || '',
+                                bild: bildUrl,
+                                tags: (r.properties.Tags?.multi_select || []).map(t => t.name),
+                                url: r.properties.URL?.url || ''
+                            }
+                        })
                         if (this.seite === 1) {
                             this.buecher = neue
                         } else {
@@ -146,14 +152,23 @@
             <div class="grid gap-8 md:grid-cols-3">
                 <!-- x-for: Fuer jedes Buch eine Karte erstellen -->
                 <template x-for="buch in buecher" :key="buch.titel">
-                    <div class="overflow-hidden transition-transform bg-white shadow-md rounded-xl hover:scale-105">
-                        <img :src="buch.bild" class="object-cover w-full h-64" />
+                    <a :href="buch.url || '#'" :target="buch.url ? '_blank' : ''" class="block overflow-hidden transition-transform bg-white shadow-md rounded-xl hover:scale-105 cursor-pointer">
+                        <!-- Bild mit Tags -->
+                        <div class="relative">
+                            <img :src="buch.bild" class="object-cover w-full h-64" />
+                            <!-- Tags oben rechts -->
+                            <div class="absolute top-2 right-2 flex flex-wrap gap-1 justify-end">
+                                <template x-for="tag in buch.tags" :key="tag">
+                                    <span class="px-2 py-1 text-xs font-medium text-white bg-[#6E4CEB]/80 rounded-full" x-text="tag"></span>
+                                </template>
+                            </div>
+                        </div>
                         <div class="p-6">
                             <h3 class="text-xl font-bold" x-text="buch.titel"></h3>
                             <p class="mt-1 text-sm text-stone-500" x-text="buch.autor"></p>
                             <p class="mt-3 text-stone-600" x-text="buch.beschreibung"></p>
                         </div>
-                    </div>
+                    </a>
                 </template>
             </div>
 
