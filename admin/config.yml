@@ -15,11 +15,3 @@ collections:
         fields:
           - { label: "Titel", name: "titel", widget: "string" }
           - { label: "Untertitel", name: "untertitel", widget: "string" }
-          - label: "Bücher"
-            name: "buecher"
-            widget: "list"
-            fields:
-              - { label: "Buchtitel", name: "buchtitel", widget: "string" }
-              - { label: "Autor", name: "autor", widget: "string" }
-              - { label: "Beschreibung", name: "beschreibung", widget: "text" }
-              - { label: "Cover", name: "cover", widget: "image" }
