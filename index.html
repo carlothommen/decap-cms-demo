@@ -93,6 +93,7 @@
     setTimeout(() => {
         document.querySelectorAll('.parallax-layer').forEach(layer => {
             layer.style.animation = 'none';
+            layer.style.opacity = '1';
         });
         window.addEventListener('scroll', () => {
             const scrollY = window.scrollY;
