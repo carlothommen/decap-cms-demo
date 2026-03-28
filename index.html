@@ -89,13 +89,19 @@
     </div>
 
 <script>
-    window.addEventListener('scroll', () => {
-        const scrollY = window.scrollY;
+    // Parallax erst starten wenn Animationen fertig sind
+    setTimeout(() => {
         document.querySelectorAll('.parallax-layer').forEach(layer => {
-            const speed = parseFloat(layer.dataset.speed);
-            layer.style.transform = `translateY(${scrollY * speed}px)`;
+            layer.style.animation = 'none';
         });
-    });
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            document.querySelectorAll('.parallax-layer').forEach(layer => {
+                const speed = parseFloat(layer.dataset.speed);
+                layer.style.transform = `translateY(${scrollY * speed}px)`;
+            });
+        });
+    }, 2000);
 </script>
 
 <script>
